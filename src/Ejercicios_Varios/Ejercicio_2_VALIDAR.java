@@ -17,14 +17,14 @@ public class Ejercicio_2_VALIDAR {
     public static Map<Graph.Nodo, Integer> dijkstra_modificado(Graph graph, Graph.Nodo origen, Graph.Nodo destino) {
 
         Map<Graph.Nodo, Integer> distancias = new HashMap<>();
-        PriorityQueue<test_graph.NodoDistancia> colaPrioridad = new PriorityQueue<>(Comparator.comparingInt(nd -> nd.distancia));
+        PriorityQueue<test_greedy.NodoDistancia> colaPrioridad = new PriorityQueue<>(Comparator.comparingInt(nd -> nd.distancia));
 
         // Inicializar todas las distancias a infinito, excepto el nodo de origen
         for (Graph.Nodo nodo : graph.obtenerNodos().values()) {
             distancias.put(nodo, Integer.MAX_VALUE);
         }
         distancias.put(origen, 0);
-        colaPrioridad.offer(new test_graph.NodoDistancia(origen, 0));
+        colaPrioridad.offer(new test_greedy.NodoDistancia(origen, 0));
 
         // Procesar nodos en orden de menor distancia
         while (!colaPrioridad.isEmpty()) {
@@ -35,7 +35,7 @@ public class Ejercicio_2_VALIDAR {
                     int nuevaDistancia = distancias.get(nodoActual) + arista.costo;
                     if (nuevaDistancia < distancias.get(arista.destino)) {
                         distancias.put(arista.destino, nuevaDistancia);
-                        colaPrioridad.offer(new test_graph.NodoDistancia(arista.destino, nuevaDistancia));
+                        colaPrioridad.offer(new test_greedy.NodoDistancia(arista.destino, nuevaDistancia));
                     }
                 }
             }

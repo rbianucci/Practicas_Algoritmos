@@ -1,7 +1,7 @@
 package Ejercicios_Varios;
 import java.util.*;
 
-public class test_graph {
+public class test_greedy {
 
 
     public static Map<Graph.Nodo, Integer> dijkstra(Graph graph, Graph.Nodo origen) {

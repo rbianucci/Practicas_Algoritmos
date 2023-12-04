@@ -2,11 +2,25 @@ package Ejercicios_Varios;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+//.Financiamiento de proyectos. El gobierno nacional dispone de un fondo para la
+//financiación de proyectos de ayuda, y se quiere financiar la realización de los
+//proyectos beneficiando la máxima cantidad de regiones posibles. La información que
+//se dispone es de una serie de tipos de proyecto diferentes, con la siguiente
+//información disponible:
+//• Presupuesto del tipo de proyecto, pi
+//• Número de regiones en las que se puede realizar, ri
+// Determinar cuáles proyectos deben ser financiados, sin superar el importe total del
+//fondo, y beneficiando la mayor cantidad de regiones.
+
+
+// En este ejercicio aplicamos Greedy con la relación de presupuesto/regiones
 
 public class Ejercicio_22 {
 
-    static class Proyecto implements Comparable<Proyecto> {
+    static class Proyecto {
         int presupuesto;
         int regiones;
 
@@ -15,61 +29,43 @@ public class Ejercicio_22 {
             this.regiones = regiones;
         }
 
-        @Override
-        public int compareTo(Proyecto otroProyecto) {
-            // Ordenar proyectos por número de regiones de manera descendente
-            return Integer.compare(otroProyecto.regiones, this.regiones);
+        double getValor(){
+            return (double) (presupuesto/regiones);
         }
     }
 
     public static List<Proyecto> seleccionarProyectos(List<Proyecto> proyectos, int presupuestoTotal) {
-        // Ordenar proyectos por número de regiones de manera descendente
-        Collections.sort(proyectos);
-
-        int n = proyectos.size();
-        int[][] tabla = new int[n + 1][presupuestoTotal + 1];
-
-        for (int i = 1; i <= n; i++) {
-            Proyecto proyectoActual = proyectos.get(i - 1);
-
-            for (int j = 1; j <= presupuestoTotal; j++) {
-                if (proyectoActual.presupuesto <= j) {
-                    tabla[i][j] = Math.max(tabla[i - 1][j], tabla[i - 1][j - proyectoActual.presupuesto] + proyectoActual.regiones);
-                } else {
-                    tabla[i][j] = tabla[i - 1][j];
-                }
-            }
-        }
-
-        // Reconstruir la lista de proyectos seleccionados
         List<Proyecto> proyectosSeleccionados = new ArrayList<>();
-        int i = n;
-        int j = presupuestoTotal;
 
-        while (i > 0 && j > 0) {
-            if (tabla[i][j] != tabla[i - 1][j]) {
-                // El proyecto actual contribuye al resultado
-                proyectosSeleccionados.add(proyectos.get(i - 1));
-                j -= proyectos.get(i - 1).presupuesto;
+        // Ordenar los proyectos por el número de regiones en orden descendente
+        // para seleccionar primero los que beneficien a más regiones
+        Collections.sort(proyectos, Comparator.comparingDouble((Proyecto p) -> p.getValor()));
+
+        int presupuestoAcumulado = 0;
+
+        // Seleccionar proyectos mientras no se exceda el presupuesto total
+        for (Proyecto proyecto : proyectos) {
+            if (presupuestoAcumulado + proyecto.presupuesto <= presupuestoTotal) {
+                proyectosSeleccionados.add(proyecto);
+                presupuestoAcumulado += proyecto.presupuesto;
             }
-            i--;
         }
 
-        Collections.reverse(proyectosSeleccionados);
         return proyectosSeleccionados;
     }
 
     public static void main(String[] args) {
         List<Proyecto> proyectos = new ArrayList<>();
-        proyectos.add(new Proyecto(100, 5));
-        proyectos.add(new Proyecto(50, 3));
-        proyectos.add(new Proyecto(80, 4));
-        proyectos.add(new Proyecto(30, 2));
+        proyectos.add(new Proyecto(10, 3));
+        proyectos.add(new Proyecto(5, 2));
+        proyectos.add(new Proyecto(8, 4));
+        proyectos.add(new Proyecto(3, 1));
 
-        int presupuestoTotal = 120;
+        int presupuestoTotal = 15;
 
         List<Proyecto> proyectosSeleccionados = seleccionarProyectos(proyectos, presupuestoTotal);
 
+        // Mostrar los proyectos seleccionados
         System.out.println("Proyectos seleccionados:");
         for (Proyecto proyecto : proyectosSeleccionados) {
             System.out.println("Presupuesto: " + proyecto.presupuesto + ", Regiones: " + proyecto.regiones);
