@@ -3,6 +3,7 @@ package Ejercicios_Varios;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.*;
 
 // Epidemia de aftosa. Varios países están sufriendo una epidemia de fiebre aftosa.
 //La enfermedad se transmite por contacto directo o indirecto con animales enfermos
@@ -26,58 +27,82 @@ import java.util.Map;
 //6 2 7 5 5 3 6 6 5 6
 // Resolver el problema de determinar las granjas que deben ser declaradas en
 //cuarentena.
+
+
+// BASICAMENTE LO QUE HAY QUE HACER ES RECORRER EL GRAFO DESDE CADA INFECTADO Y VER SI LA ARISTA QUE LO CONECTA
+// AL OTRO VERTICE TIENE UNA FECHA SUPERIOR A LA DEL INFECTADO,
+
 public class Ejercicio_12_TERMINAR {
 
-    class Granja_infectada{
+    static class NodoInfectado {
+        Graph.Nodo nodo;
+        int fecha;
 
-        char nombre;
-
-        int fecha_infeccion;
-
-        Granja_infectada(char nombre, int fecha_infeccion){
-            this.nombre = nombre;
-            this.fecha_infeccion = fecha_infeccion;
+        NodoInfectado(Graph.Nodo nodo, int fecha) {
+            this.nodo = nodo;
+            this.fecha = fecha;
         }
 
-        public char get_nombre(){
-            return this.nombre;
+        public Graph.Nodo getNodo() {
+            return nodo;
         }
 
-        public int get_fecha(){
-            return this.fecha_infeccion;
+        public int getFecha() {
+            return fecha;
         }
     }
-    public ArrayList<Integer> aftosa(Graph G, ArrayList<Granja_infectada> conjunto){
-        ArrayList<Integer> susceptible = new ArrayList<Integer>();
-        while (conjunto.size() != 0){
-            Granja_infectada actual = conjunto.getFirst();
-            conjunto.remove(actual);
-            Map<Integer, Graph.Nodo> granjas = G.obtenerNodos();
-            for (Graph.Nodo granja : granjas.values()){
-                if (G.existeArista(Character.getNumericValue(actual.get_nombre()),granja.id)){
-                    if (actual.get_fecha() < G.calcularCosto(Character.getNumericValue(actual.get_nombre()),granja.id)){
-                        G.cambiarArista(Character.getNumericValue(actual.get_nombre()),granja.id,actual.get_fecha());
-                        susceptible.add(granja.id);
+
+    // Método para propagar la infección
+    public static List<Graph.Nodo> aftasa(Graph grafo, List<NodoInfectado> infectados) {
+        List<Graph.Nodo> cuarentena = new ArrayList<>();
+        while (!infectados.isEmpty()){
+            NodoInfectado infectado = infectados.getFirst();
+            infectados.removeFirst();
+            for (Graph.Nodo nodo: grafo.obtenerNodos().values()){
+                if (grafo.existeArista(infectado.getNodo().id,nodo.id)){
+                    if (infectado.getFecha() <= grafo.calcularCosto(infectado.getNodo().id, nodo.id)){
+                        cuarentena.add(nodo);
                     }
                 }
             }
         }
-        return susceptible;
+        return cuarentena;
     }
 
     public static void main(String[] args) {
         Graph grafo = new Graph();
-        grafo.insertarNodo(Character.getNumericValue('A'));
-        grafo.insertarNodo(Character.getNumericValue('B'));
-        grafo.insertarNodo(Character.getNumericValue('C'));
-        grafo.insertarNodo(Character.getNumericValue('D'));
-        grafo.insertarNodo(Character.getNumericValue('E'));
-        grafo.insertarNodo(Character.getNumericValue('F'));
+        int A = (int)'A';
+        int B = (int)'B';
+        int C = (int)'C';
+        int D = (int)'D';
+        int E = (int)'E';
+        int F = (int)'F';
+        grafo.insertarNodo(A);
+        grafo.insertarNodo(B);
+        grafo.insertarNodo(C);
+        grafo.insertarNodo(D);
+        grafo.insertarNodo(E);
+        grafo.insertarNodo(F);
 
-        grafo.insertarArista(Character.getNumericValue('A'),Character.getNumericValue('E'),5);
-        grafo.insertarArista(Character.getNumericValue('B'),Character.getNumericValue('A'),7);
-        grafo.insertarArista(Character.getNumericValue('C'),Character.getNumericValue('E'),5);
+        System.out.println("CONVERTIDO: " + A);
+        System.out.println("desconvertido: " + (char)A);
 
+        grafo.insertarArista(E,B,6);
+        grafo.insertarArista(D,A,2);
+        grafo.insertarArista(B,A,7);
+        grafo.insertarArista(C,D,5);
+        grafo.insertarArista(F,D,5);
+        grafo.insertarArista(E,C,3);
+        grafo.insertarArista(B,F,6);
+        grafo.insertarArista(F,E,6);
+        grafo.insertarArista(A,E,5);
+        grafo.insertarArista(C,B,6);
 
+        List<NodoInfectado> infectados = new ArrayList<>();
+        infectados.add(new NodoInfectado(grafo.obtenerNodoPorId((char)A), 5));
+
+        for (Graph.Nodo nodo : aftasa(grafo, infectados)){
+            System.out.println((char)nodo.id);
+        }
     }
 }

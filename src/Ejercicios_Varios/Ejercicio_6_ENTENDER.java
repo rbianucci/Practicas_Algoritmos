@@ -60,5 +60,12 @@ public class Ejercicio_6_ENTENDER {
 
         grafo = traducciones(grafo);
 
+        for (Graph.Nodo nodo : grafo.obtenerNodos().values()){
+            System.out.println("Nodo: " + nodo.id);
+        }
+
+        for (Graph.Arista arista : grafo.obtenerAristas()){
+            System.out.println("Arista | Origen: " + arista.origen.id + "  Destino: " + arista.destino.id + "  Costo: " + arista.costo);
+        }
     }
 }

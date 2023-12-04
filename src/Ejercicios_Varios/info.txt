@@ -1,0 +1,3 @@
+
+Para decidir si Greedy o Progra Dinámica hay que tener en cuenta que en greedy se pueden dividir los valores, cosa que
+en progra dinamica no dado que en greedy necesitamos la relación que nos da valor para el conjunto candidatos

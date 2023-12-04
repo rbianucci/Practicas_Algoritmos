@@ -2,6 +2,7 @@ package Ejercicios_Varios;
 
 import java.util.*;
 
+
 class Graph {
 	private Map<Integer, Nodo> nodos;
 	private List<Arista> aristas;
@@ -30,6 +31,10 @@ class Graph {
 			this.origen = origen;
 			this.destino = destino;
 			this.costo = costo;
+		}
+
+		public int getCosto(){
+			return this.costo;
 		}
 	}
 
