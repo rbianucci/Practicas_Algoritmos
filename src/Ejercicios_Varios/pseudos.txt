@@ -1,0 +1,150 @@
+
+
+BUSQUEDA BINARIA
+La complejidad de este algoritmo es de O(log(n))
+Entrada: vector<entero> S, int x
+SALIDA: boolean resultado
+
+if longitud(S) == 1
+    devolver S[0] == x
+else
+    y = S[longitud(S)/2]
+    if x == y
+        return true
+    else
+        mitad = longitud(S)/2
+        if x > y
+            busquedaBinaria(S[mitad,longitud(S)-1],x)
+        else
+            busquedaBinaria(S[0,mitad-1],x)
+        fin else
+    fin else
+fin else
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+SELECCION
+La complejidad de este algoirtmo es O(n^2)
+Entrada: vector<Entero> S
+Salida: S
+
+n = longitud(S)
+para i=0 hasta n-1
+    m = i
+    para j=i hasta n-1
+        si S[j] < S[m]
+            m = j
+        fin si
+    fin para
+    aux = S[i]
+    S[i] = S[m]
+    S[m] = aux
+fin para
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+INSERCION
+La complejidad de este algoritm es O(n^2)
+n = longitud(S)
+para i=1 hasta n-1
+    para j=i hasta 1 j--
+        si S[j] < S[j-1]
+            aux = S[j-1]
+            S[j-1] = S[j]
+            S[j] = aux
+        fin si
+    fin para
+fin para
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+MERGESORT
+La complejidad de este algoritmo es de O(nlog(n))
+ENTRADA: Vector<Entero> S, int inicio, int fin
+SALIDA:
+
+MergeSort
+    if inicio < fin
+        medio = (fin+inicio)/2
+        MergeSort(S,inicio,medio)
+        MergeSort(S,inicio+1,fin)
+        Merge(S,inicio,fin)
+    fin si
+fin MergeSort
+
+Merge
+    Vector<Entero> R = inicializarVector(fin-inicio+1)
+    medio (fin+inicio)/2
+    i = inicio
+    j = medio+1
+    para k=0 hasta fin-inicio
+        si j>fin || S[i]<=S[j]
+            S[k] = S[i]
+            i = i+1
+        sino
+            S[k] = S[j]
+            j = j+1
+        fin si
+    fin para
+    para k=0 hasta fin-inicio
+        S[inicio+k] = R[k]
+    fin para
+fin Merge
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+PROBLEMA CAMBIO GREEDY
+Este algoritmo tiene una complejidad de O(n) siendo n las monedas como maximo.
+ENTRADA: Vector<Entero> monedas, int valor
+SALIDA: int monedas
+
+int n = 0
+int s = 0
+int i = 0
+mientras s < valor Y i < longitud(monedas)
+    si s+monedas[i] < valor
+        s = s + monedas[i]
+        n = n + 1
+    sino
+        i = i+1
+    fin si
+fin mientras
+si i < longitud(monedas)
+    devolver n
+sino
+    devolver -1
+fin si
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+PROBLEMA MOCHILA GREEDY
+Este algoritmo tiene un costo de O(n)
+ENTRADA Vector<Objeto> O , entero p
+SALIDA: Vector<real> R
+    Ordenar(O,-> objeto.valor/peso)
+    para i=0 hasta largo(O)
+        R[i] = 0
+    fin para
+    suma = 0
+    objeto = 0
+    mientras suma < p
+        R[objeto] = MIN(1,(p-suma)/O[Objeto].peso)
+        suma = suma + MIN()
